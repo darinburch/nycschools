@@ -17,8 +17,9 @@ class SchoolViewModel: ObservableObject {
     @Published var orderBy: SchoolOrder = .name
     @Published var schools: [School] = []
     
-    @Published var currentSat: SatScore?
+    var selectedSchoolDbn: String = ""
     
+    @Published var currentSat: SatScore?
     
     @Published var presentSatView: Bool = false
     

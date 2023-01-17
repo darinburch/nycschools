@@ -19,24 +19,26 @@ struct SchoolCell: View {
                 SchoolName(name: school.school_name ?? "")
                 SchoolLocation(location: school.location ?? "")
                 SchoolOverview(overview: school.overview_paragraph ?? "")
-                SchoolNumber(vm: vm, number: school.phone_number ?? "", action: { vm.getSatScore(dbn: school.dbn) })
+                SchoolNumber(vm: vm, school: school, action: { getSatScore() })
             }.padding()
             ChevronArrow()
         }
         .listRowInsets(EdgeInsets()) // expand to edge of device
-        .background (
+        .background ( /// programatic navigation link
             NavigationLink("", destination: SatScoreView(vm: vm), isActive: $vm.presentSatView).hidden()
         )
+    }
+    
+    func getSatScore() {
+        vm.selectedSchoolDbn = ""
+        vm.selectedSchoolDbn = school.dbn
+        vm.getSatScore(dbn: school.dbn)
     }
 }
 
 
 struct SchoolName: View {
     let name: String
-    
-    var components: [String] {
-        return name.components(separatedBy: "")
-    }
     
     var body: some View {
         HStack {
@@ -52,7 +54,7 @@ struct SchoolName: View {
 struct SchoolLocation: View {
     let location: String
     
-    var components: [String] {
+    var components: [String] {     /// exclude coordinates for UI
         return location.components(separatedBy: "(")
     }
     
@@ -73,7 +75,6 @@ struct SchoolOverview: View {
     var body: some View {
         Text(overview)
             .lineLimit(nil)
-        
             .font(.system(size: 12, weight: .regular))
             .padding(.trailing, TRAILING_PADDING)
     }
@@ -82,28 +83,44 @@ struct SchoolOverview: View {
 
 struct SchoolNumber: View {
     @ObservedObject var vm : SchoolViewModel
-    let number: String
+    let school: School
     let action: () -> Void
     
     var body: some View {
         HStack {
-            Text(number)
+            Text(school.phone_number ?? NA)
                 .lineLimit(1)
                 .font(.system(size: 14, weight: .bold))
             Button(action: {action()}, label: {
                 Text("View SAT Results")
-                    .opacity(vm.satLoading ? 0.0 : 1.0)
+                    .opacity(satOpacity())
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(.blue)
                     .padding(.leading, 20)
                     .overlay(
                         ProgressView().tint(.blue)
-                            .opacity(vm.satLoading ? 1.0 : 0.0)
+                            .opacity(loadingOpacity())
                     )
             })
             Spacer()
         }
     }
+    
+    /// below 2 functions make sure progress view shows for correct cell only and not all
+    func satOpacity() -> Double {
+        if vm.satLoading && vm.selectedSchoolDbn == school.dbn {
+            return 0.0
+        }
+        return 1.0
+    }
+    
+    func loadingOpacity() -> Double {
+        if vm.satLoading && vm.selectedSchoolDbn == school.dbn {
+            return 1.0
+        }
+        return 0.0
+    }
+    
 }
 
 struct ChevronArrow: View {

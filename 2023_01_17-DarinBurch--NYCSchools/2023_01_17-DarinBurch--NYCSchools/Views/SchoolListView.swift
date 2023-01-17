@@ -16,6 +16,7 @@ struct SchoolListView: View {
         return floor(double) == double
     }
     
+    /// get id of last index so when that cell appears we make an API call to load 10 more schools
     var schoolDbnLastIndex: String {
         if let lastSchool = vm.schools.last {
             return lastSchool.dbn 
@@ -35,7 +36,7 @@ struct SchoolListView: View {
         } else {
             List(vm.schools, id: \.dbn) { school in
                 SchoolCell(vm: vm, school: school)
-                    .onAppear {
+                    .onAppear { /// when last element appears we load more
                         if school.dbn == schoolDbnLastIndex && moreSchoolsToLoad {
                             Task.detached {
                                 await vm.loadMoreSchools()
@@ -47,8 +48,8 @@ struct SchoolListView: View {
             .alert(isPresented: $vm.showAlert) {
                 Alert(title: Text(vm.alertTitle), message: Text(vm.alertMessage), dismissButton: .default(Text("Ok")))
             }
-            .listStyle(PlainListStyle()) // get rid of extra padding TOP AND BOTTOM
-            .refreshable {
+            .listStyle(PlainListStyle()) /// get rid of extra padding TOP AND BOTTOM
+            .refreshable { /// pull down to refresh functionality
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
                     Task.detached {
                         await vm.loadSchools()

@@ -11,7 +11,6 @@ import Foundation
 
 class SatDataService {
     
-    // MARK: CONVERTED ASYNC AWAIT API CALL
     static func loadSatData(dbn: String) async throws -> [SatScore] {
         guard let url = URL(string: Ref.SAT_ENDPOINT(dbn: dbn)) else {
             throw ResponseError.urlBuildError("Url build error")

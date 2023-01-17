@@ -10,7 +10,6 @@ import Foundation
 
 class SchoolDataService {
     
-    // MARK: CONVERTED ASYNC AWAIT API CALL
     static func loadSchoolData(limit: Int, page: Int, orderBy: SchoolOrder) async throws -> [School] {
         guard let url = URL(string: Ref.NYC_SCHOOLS_ENDPOINT(limit: limit, page: page, orderBy: orderBy)) else {
             throw ResponseError.urlBuildError("Url build error")

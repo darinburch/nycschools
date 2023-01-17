@@ -18,7 +18,7 @@ struct SchoolListView: View {
     
     var schoolDbnLastIndex: String {
         if let lastSchool = vm.schools.last {
-            return lastSchool.dbn
+            return lastSchool.dbn 
         }
         return ""
     }
@@ -33,7 +33,7 @@ struct SchoolListView: View {
                 Spacer()
             }
         } else {
-            List(vm.schools, id: \.id) { school in
+            List(vm.schools, id: \.dbn) { school in
                 SchoolCell(vm: vm, school: school)
                     .onAppear {
                         if school.dbn == schoolDbnLastIndex && moreSchoolsToLoad {

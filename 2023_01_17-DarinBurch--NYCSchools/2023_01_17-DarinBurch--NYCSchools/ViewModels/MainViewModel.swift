@@ -52,6 +52,7 @@ class SchoolViewModel: ObservableObject {
                     self.isLoading = false
                 }
             } catch {
+                print(error)
                 DispatchQueue.main.async {
                     self.allCaughtUp = false
                     self.loadingMoreSchools = false

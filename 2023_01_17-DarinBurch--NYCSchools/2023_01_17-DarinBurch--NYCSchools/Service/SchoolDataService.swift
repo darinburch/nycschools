@@ -20,7 +20,6 @@ class SchoolDataService {
         urlRequest.httpMethod = "GET"
         
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        
         let httpResponse = response as? HTTPURLResponse
         if !(200...299).contains(httpResponse!.statusCode) {
             do {

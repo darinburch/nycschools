@@ -8,7 +8,6 @@
 import Foundation
   
 struct School: Decodable {
-    var id : UUID = UUID()
     let dbn: String
     let school_name: String?
     let overview_paragraph: String?

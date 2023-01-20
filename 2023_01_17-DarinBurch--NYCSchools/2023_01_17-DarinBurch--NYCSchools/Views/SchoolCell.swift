@@ -91,8 +91,7 @@ struct SchoolNumber: View {
             Text(school.phone_number ?? NA)
                 .lineLimit(1)
                 .font(.system(size: 14, weight: .bold))
-            Button(action: {action()}, label: {
-                Text("View SAT Results")
+                Text("View SAT scores")
                     .opacity(satOpacity())
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(.blue)
@@ -101,7 +100,9 @@ struct SchoolNumber: View {
                         ProgressView().tint(.blue)
                             .opacity(loadingOpacity())
                     )
-            })
+                    .onTapGesture {
+                        action()
+                    }
             Spacer()
         }
     }
